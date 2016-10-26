@@ -22,11 +22,7 @@ mediansteps <- median(dailystep$TotalSteps)
 averagefive <- data %>%
     group_by(interval) %>%
     summarize(AverageSteps=mean(steps))
-plot(averagefive$interval, averagefive$AverageSteps, 
-     type="l",
-     xlab="Interval",
-     ylab="Average steps",
-     main="Average steps during 5 minutes")
+plot(averagefive$interval, averagefive$AverageSteps, type="l",xlab="Interval", ylab="Average steps", main="Average steps during 5 minutes")
 maxstep <- averagefive$interval[which.max(averagefive$AverageSteps)]
 
 # Imputing missing values #
@@ -43,11 +39,20 @@ filldata$date <- as.Date(filldata$date)
 fillstepsperday <- filldata %>% 
     group_by(date) %>% 
     summarize(TotalSteps=sum(steps))
-hist(fillstepsperday$TotalSteps, 
-     xlab="Total number of steps daily", 
-     ylab="Count", 
-     main="Histogram of total number of steps taken daily",
-     col=3)
+hist(fillstepsperday$TotalSteps, xlab="Total number of steps daily", ylab="Count", main="Histogram of total number of steps taken daily", col=3)
 fillmeansteps <- mean(fillstepsperday$TotalSteps)
 fillmediansteps <- median(fillstepsperday$TotalSteps)
 
+# Are there differences in activity patterns between weekdays and weekends? #
+
+filldata$day <- weekdays(filldata$date)
+filldata$daytype <- "weekday"
+filldata$daytype[filldata$day %in% c("Saturday", "Sunday")] <- "weekend"
+dayaverage <- filldata %>% 
+    group_by(daytype, interval) %>%
+    summarize(AverageSteps=mean(steps))
+    
+library(ggplot2)
+qplot(interval, AverageSteps, data=dayaverage,
+      type="l", geom="line", xlab="Interval", ylab="Number of Steps (Average)", main="Average steps taken Weekends vs. Weekdays",
+      facets =daytype ~ .)
