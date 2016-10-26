@@ -1,4 +1,4 @@
-echo=TRUE
+> echo=TRUE
 
 > raw = read.csv("activity.csv")
 > str(raw)
