@@ -1,0 +1,53 @@
+library(dplyr)
+
+activity <- unzip("activity.zip")
+raw <- read.csv(activity)
+rm(activity)
+data <- na.omit(raw)
+data$date <- as.Date(data$date)
+
+
+# What is mean total number of steps taken per day? #
+dailystep <- data %>% 
+    group_by(date) %>% 
+    summarize(TotalSteps=sum(steps))
+
+hist(dailystep$TotalSteps, xlab="Total steps taken each day", ylab="Count", 
+main="Histogram of total number of steps each day", col=3)
+
+meansteps <- mean(dailystep$TotalSteps)
+mediansteps <- median(dailystep$TotalSteps)
+
+# What is the average daily activity pattern? #
+averagefive <- data %>%
+    group_by(interval) %>%
+    summarize(AverageSteps=mean(steps))
+plot(averagefive$interval, averagefive$AverageSteps, 
+     type="l",
+     xlab="Interval",
+     ylab="Average steps",
+     main="Average steps during 5 minutes")
+maxstep <- averagefive$interval[which.max(averagefive$AverageSteps)]
+
+# Imputing missing values #
+lost <- sum(is.na(raw$steps))
+
+filldata <- raw
+for (i in 1:nrow(filldata)) {
+    if (is.na(filldata$steps[i])) {
+        index <- which(filldata$interval[i] == averagefive$interval)
+        filldata$steps[i] <- averagefive[index,]$AverageSteps
+    }
+}
+filldata$date <- as.Date(filldata$date)
+fillstepsperday <- filldata %>% 
+    group_by(date) %>% 
+    summarize(TotalSteps=sum(steps))
+hist(fillstepsperday$TotalSteps, 
+     xlab="Total number of steps daily", 
+     ylab="Count", 
+     main="Histogram of total number of steps taken daily",
+     col=3)
+fillmeansteps <- mean(fillstepsperday$TotalSteps)
+fillmediansteps <- median(fillstepsperday$TotalSteps)
+
