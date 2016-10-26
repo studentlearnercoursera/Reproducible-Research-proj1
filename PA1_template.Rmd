@@ -1,58 +1,67 @@
-library(dplyr)
+echo=TRUE
 
-activity <- unzip("activity.zip")
-raw <- read.csv(activity)
-rm(activity)
-data <- na.omit(raw)
-data$date <- as.Date(data$date)
+> raw = read.csv("activity.csv")
+> str(raw)
 
 
 # What is mean total number of steps taken per day? #
-dailystep <- data %>% 
-    group_by(date) %>% 
-    summarize(TotalSteps=sum(steps))
+> totalsum <- aggregate(raw$steps, by = list(date=raw$date), FUN=sum)
+> hist(totalsum$x, main = "Histogram of total number of steps per day",
+>      xlab = "Total number of steps per day")
+> Totalsummary<-summary(totalsum)
+> Totalsummary
+> Totalsummary[4,2]
+> Totalsummary[3,2]
 
-hist(dailystep$TotalSteps, xlab="Total steps taken each day", ylab="Count", 
-main="Histogram of total number of steps each day", col=3)
-
-meansteps <- mean(dailystep$TotalSteps)
-mediansteps <- median(dailystep$TotalSteps)
+mean = 10766
+median = 10765
 
 # What is the average daily activity pattern? #
-averagefive <- data %>%
-    group_by(interval) %>%
-    summarize(AverageSteps=mean(steps))
-plot(averagefive$interval, averagefive$AverageSteps, type="l",xlab="Interval", ylab="Average steps", main="Average steps during 5 minutes")
-maxstep <- averagefive$interval[which.max(averagefive$AverageSteps)]
+> avgptrn <- aggregate(raw$steps, by =list(interval=raw$interval), 
+>                          FUN = mean, na.rm = T)
+> plot(avgptrn$interval,avgptrn$x, type = 'l')
+> stepavbyint <- aggregate(activity$steps, by =list(interval=activity$interval), 
+                         FUN = mean, na.rm = T)
+plot(stepavbyint$interval,stepavbyint$x, type = 'l')
+stepavbyintmax <- stepavbyint[stepavbyint$x == max(stepavbyint$x),]
+stepavbyintmax
+> maxday
+
+day=835
+steps=206.1698
 
 # Imputing missing values #
-lost <- sum(is.na(raw$steps))
+> Missing <- sum(!complete.cases(activity))
+> Missing
 
-filldata <- raw
-for (i in 1:nrow(filldata)) {
-    if (is.na(filldata$steps[i])) {
-        index <- which(filldata$interval[i] == averagefive$interval)
-        filldata$steps[i] <- averagefive[index,]$AverageSteps
-    }
-}
-filldata$date <- as.Date(filldata$date)
-fillstepsperday <- filldata %>% 
-    group_by(date) %>% 
-    summarize(TotalSteps=sum(steps))
-hist(fillstepsperday$TotalSteps, xlab="Total number of steps daily", ylab="Count", main="Histogram of total number of steps taken daily", col=3)
-fillmeansteps <- mean(fillstepsperday$TotalSteps)
-fillmediansteps <- median(fillstepsperday$TotalSteps)
+There are 2304 missing values
+
+> raw2 <- raw
+> meandata <- aggregate(raw2$steps, by=list(interval=raw2$interval), FUN=mean, na.rm=T)
+> for(i in 1 : nrow(raw2)) {
+>   if(is.na(raw2$steps[i])) {
+>     raw2$steps[i] <- meandata$x[meandata$interval == raw2$interval[i]]
+>   }
+> }
+> sum(is.na(raw2))
+> totalsum2 <- aggregate(raw2$steps, by = list(date=raw2$date), FUN=sum)
+> hist(totalsum2$x, main = "Histogram of total number of steps per day",
+>       xlab = "Total number of steps per day")
+> totalsummary2 <- summary(totalsum2)
+> totalsummary2
+> totalsummary2[4,2]
+> totalsummary2[3,2]
+
+Do these values differ from the estimates from the first part of the assignment? NO
+What is the impact of imputing missing data on the estimates of the total daily number of steps? No impact
 
 # Are there differences in activity patterns between weekdays and weekends? #
+> library(ggplot2)
+> raw2$day = as.factor(ifelse(weekdays(as.Date(raw2$date)) == "Sunday" | weekdays(as.Date(raw2$date)) == "Saturday",
+"weekend", "weekday"))
+> str(raw2)
+> avgdaystep <- aggregate(steps~interval+day,raw2,FUN = mean)
+> graph <- ggplot(avgdaystep,aes(interval,steps)) + geom_line() + facet_wrap(~day,ncol=1)
+> graph
 
-filldata$day <- weekdays(filldata$date)
-filldata$daytype <- "weekday"
-filldata$daytype[filldata$day %in% c("Saturday", "Sunday")] <- "weekend"
-dayaverage <- filldata %>% 
-    group_by(daytype, interval) %>%
-    summarize(AverageSteps=mean(steps))
-    
-library(ggplot2)
-qplot(interval, AverageSteps, data=dayaverage,
-      type="l", geom="line", xlab="Interval", ylab="Number of Steps (Average)", main="Average steps taken Weekends vs. Weekdays",
-      facets =daytype ~ .)
+The only difference is that during weekdays, there are more steps taken in the morning
