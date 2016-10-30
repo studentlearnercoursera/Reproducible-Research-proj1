@@ -1,10 +1,13 @@
+```r
 # echo=TRUE
 
 # raw = read.csv("activity.csv")
 # str(raw)
-
+```r
 
 # What is mean total number of steps taken per day? #
+
+```r
 # totalsum <- aggregate(raw$steps, by = list(date=raw$date), FUN=sum)
 # hist(totalsum$x, main = "Histogram of total number of steps per day",
 #      xlab = "Total number of steps per day")
@@ -20,3 +23,4 @@
 #  (Other)   :55   NA's   :8
 mean = 10766
 median = 10765
+```r
