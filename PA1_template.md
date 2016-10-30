@@ -3,7 +3,7 @@
 
 # raw = read.csv("activity.csv")
 # str(raw)
-```r
+'''
 
 # What is mean total number of steps taken per day? #
 
@@ -23,4 +23,4 @@
 #  (Other)   :55   NA's   :8
 mean = 10766
 median = 10765
-```r
+'''
