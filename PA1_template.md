@@ -16,7 +16,7 @@
 # Totalsummary
 ```
 
-![](plots/plot_1.png)<!-- -->
+![](plots/plot_1.png)<https://github.com/studentlearnercoursera/Reproducible-Research-proj1/blob/master/Plots/plot%201.png?raw=true>
 
 ```r
 #          date          x        
