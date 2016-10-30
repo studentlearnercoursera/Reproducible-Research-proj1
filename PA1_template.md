@@ -16,7 +16,7 @@
 # Totalsummary
 ```
 
-![](Plots/figure-html/plot 1.png)<!-- -->
+![](Plots/plot_1.png)<!-- -->
 
 ```r
 #          date          x        
