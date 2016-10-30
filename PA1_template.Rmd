@@ -22,10 +22,9 @@ median = 10765
 > plot(avgptrn$interval,avgptrn$x, type = 'l')
 > stepavbyint <- aggregate(activity$steps, by =list(interval=activity$interval), 
                          FUN = mean, na.rm = T)
-plot(stepavbyint$interval,stepavbyint$x, type = 'l')
-stepavbyintmax <- stepavbyint[stepavbyint$x == max(stepavbyint$x),]
-stepavbyintmax
-> maxday
+>plot(stepavbyint$interval,stepavbyint$x, type = 'l')
+>stepavbyintmax <- stepavbyint[stepavbyint$x == max(stepavbyint$x),]
+>stepavbyintmax
 
 day=835
 steps=206.1698
