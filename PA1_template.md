@@ -1,11 +1,12 @@
-```r
-# echo=TRUE
+# Reproducible Research: Peer Assessment 1
 
+
+```r
 # raw = read.csv("activity.csv")
 # str(raw)
-'''
+```
 
-# What is mean total number of steps taken per day? #
+## What is mean total number of steps taken per day? #
 
 ```r
 # totalsum <- aggregate(raw$steps, by = list(date=raw$date), FUN=sum)
@@ -13,6 +14,11 @@
 #      xlab = "Total number of steps per day")
 # Totalsummary<-summary(totalsum)
 # Totalsummary
+```
+
+![](Plots/figure-html/plot 1.png)<!-- -->
+
+```r
 #          date          x        
 #  2012-10-01: 1   Min.   :   41  
 #  2012-10-02: 1   1st Qu.: 8841  
@@ -21,6 +27,6 @@
 #  2012-10-05: 1   3rd Qu.:13294  
 #  2012-10-06: 1   Max.   :21194  
 #  (Other)   :55   NA's   :8
+```      
 mean = 10766
 median = 10765
-'''
