@@ -42,7 +42,7 @@ median = 10765
 >stepavbyintmax
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![alt tag](https://github.com/studentlearnercoursera/Reproducible-Research-proj1/blob/master/plots/plot2.png)
 
 ```r
 >stepavbyintmax <- stepavbyint[stepavbyint$x == max(stepavbyint$x),]
@@ -77,7 +77,7 @@ There are 2304 missing values
 > totalsummary2 <- summary(totalsum2)
 > totalsummary2
 ```
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![alt tag](https://github.com/studentlearnercoursera/Reproducible-Research-proj1/blob/master/plots/plot3.png)
 
 ```
 >          date          x        
@@ -104,7 +104,7 @@ What is the impact of imputing missing data on the estimates of the total daily 
 > graph
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![alt tag](https://github.com/studentlearnercoursera/Reproducible-Research-proj1/blob/master/plots/plot4.png)
 
 
 The only difference is that during weekdays, there are more steps taken in the morning
